@@ -1935,7 +1935,7 @@ timeout](https://raw.githubusercontent.com/gnuclear/atom-whitepaper/master/msc/i
 There are two types of Merkle trees supported in the Tendermint/Cosmos
 ecosystem: The Simple Tree, and the IAVL+ Tree.
 
-Tendermint/Cosmos生态支持的两种梅克尔树：简单树和IAVL+树。
+Tendermint/Cosmos生态支持的两种m默克尔树：简单树和IAVL+树。
 
 #### Simple Tree | 简易版梅克尔树
 
@@ -1972,7 +1972,7 @@ hash can be computed efficiently.  The tree is balanced using a variant of the
 [AVL algorithm](http://en.wikipedia.org/wiki/AVL_tree), and all operations are
 O(log(n)).
 
-IAVL+数据结构的目的是永久储存应用状态中的密钥对，这样就可以对确定的梅克尔根哈希进行高效的运算。这个树的平衡通过 AVL算法的变体来实现，所有运行都是O(log(n))。
+IAVL+数据结构的目的是永久储存应用状态的键值对，这样就可以对确定的梅克尔根哈希进行高效的运算。这个树的平衡通过AVL算法的变体来实现，所有运行复杂度都是O(log(n))。
 
 In an AVL tree, the heights of the two child subtrees of any node differ by at
 most one.  Whenever this condition is violated upon an update, the tree is
@@ -1982,7 +1982,7 @@ pairs.  The AVL+ algorithm (note the plus) modifies the AVL algorithm to keep
 all values on leaf nodes, while only using branch-nodes to store keys.  This
 simplifies the algorithm while keeping the merkle hash trail short.
 
-在AVL树中，任意节点的两个子树的高度至多有一处不同。无论在什么时候这种情况都是与更新相违背的，这个树都会通过创造O(log(n))新节点（指向旧树上未修改的节点）来再次达到平衡。在初始的AVL算法中，内部节点也可以保留密钥值对。AVL+算法（注意这里有个"+"号）对AVL算法进行了修改，来维持所有数值都在树叶节点上，同时还只需采用分支-节点来存储密钥。这样在维持较短的梅克尔哈希轨迹对的同时，还简化了算法。
+无论在什么时候这种情况因为更新导致违背，这个树都会通过创造O(log(n))新节点（指向旧树上未修改的节点）来再次达到平衡。在初始的AVL算法中，内部节点也可以保留健值对。AVL+算法（注意这里有个"+"号）对AVL算法进行了修改，来维持所有数值都在树叶节点上，同时还只需采用分支节点来存储键。这样在维持较短的梅克尔哈希轨迹对的同时，还简化了算法。
 
 The AVL+ Tree is analogous to Ethereum's [Patricia
 tries](http://en.wikipedia.org/wiki/Radix_tree).  There are tradeoffs.  Keys do
@@ -1993,11 +1993,14 @@ and leaf nodes.  The Merkle proof is on average shorter, being a balanced binary
 tree.  On the other hand, the Merkle root of an IAVL+ tree depends on the order
 of updates.
 
-AVL+树类似于以太坊的[帕氏树](http://en.wikipedia.org/wiki/Radix_tree)。其中也有一定的折中。密钥不需要在嵌入到IAVL+树之前生成哈希，所以这就为密钥空间提供了较快的命令迭代，这会为很多应用程序带来好处。逻辑实现更简单，只需要内部节点和树叶节点这两种节点类型。作为一个平衡的二叉树，其梅克尔证明平均更短。而另一方面，IAVL+树的梅克尔根有取决于命令的更新。
+AVL+树类似于以太坊的[帕氏树](http://en.wikipedia.org/wiki/Radix_tree)。其中也有一定的折中。键不需要在嵌入到IAVL+树之前生成哈希，所以这就为键空间提供了较快的顺序迭代，这会为很多应用程序带来好处。逻辑实现更简单，只需要内部节点和树叶节点这两种节点类型。作为一个平衡的二叉树，其梅克尔证明平均更短。而另一方面，IAVL+树的梅克尔根有取决于命令的更新。
 我们将支持额外有效的梅克尔树，比如当二元变量可用时的以太坊帕氏树。
 
 We will support additional efficient Merkle trees, such as Ethereum's Patricia
 Trie when the binary variant becomes available.
+
+我们将支持格外有效的梅克尔树，比如以太坊的帕氏树，同时实现二进制变量的可用性。
+
 
 ### Transaction Types |交易类型
 
@@ -2116,7 +2119,7 @@ app-state of "Hub".  During this procedure, the `IBCPacket` fields are
 identical: the `SrcChainID` is always "Zone1", and the `DstChainID` is always
 "Zone2".
 
-通过"Hub"，将数据包从"Zone1"发送到"Zone2"的序列，描述在{Figure X}函数中。首先，一个`IBCPacketTx`会向"Hub"证明数据包是包含在"Zone1"的应用程序状态中。然后，另一个`IBCPacketTx` 会向"Zone2"证明数据包包含在"Hub"的应用程序状态中。在这个过程中，`IBCPacketTx` 的字段是相同的：`SrcChainID`永远是"Zone1"，而`DstChainID` 永远是"Zone2"。
+通过"枢纽"，将数据包从"分区1"发送到"分区2"的序列，描述在{Figure X}函数中。首先，一个`IBCPacketTx`会向"Hub"证明数据包是包含在"分区1"的应用程序状态中。然后，另一个`IBCPacketTx` 会向"分区2"证明数据包包含在"Hub"的应用程序状态中。在这个过程中，`IBCPacketTx` 的字段是相同的：`SrcChainID`永远是"Zone1"，而`DstChainID` 永远是"Zone2"。
 
 The `PacketProof` must have the correct Merkle-proof path, as follows:
 
@@ -2132,7 +2135,7 @@ When "Zone1" wants to send a packet to "Zone2" through "Hub", the
 the "Hub", or "Zone2".  The only mutable field is `Status` for tracking
 delivery.
 
-当“Zone1”要通过“Hub”将数据包传送到“Zone2”中，无论数据包是否在“Zone1”、“Hub”、或者“Zone2”中梅克尔化了，`IBCPacket`数据都是相同的。唯一易变的字段是为追踪交付的`Status`。
+当“分区1”要通过“枢纽”将数据包传送到“分区2”中，无论数据包是否在“分区1”、“枢纽”、或者“分区2”中梅克尔化了，`IBCPacket`数据都是相同的。唯一易变的字段是为追踪交付的`Status`。
 
 ## Acknowledgements |鸣谢 ############################################################
 
